@@ -1,10 +1,12 @@
 package com.security.corespringsecurity.domain;
 
 import lombok.Data;
+import org.springframework.core.annotation.Order;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @Data
