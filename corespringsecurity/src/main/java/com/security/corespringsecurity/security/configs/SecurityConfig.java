@@ -1,5 +1,7 @@
 package com.security.corespringsecurity.security.configs;
 
+import com.security.corespringsecurity.security.common.FormAuthenticationDetailsSource;
+import com.security.corespringsecurity.security.common.FormWebAuthenticationDetails;
 import com.security.corespringsecurity.security.provider.CustomAuthenticationProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,17 +18,23 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 @Configuration
 @EnableWebSecurity
 @Slf4j
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
-    private AuthenticationDetailsSource authenticationDetailsSource;
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    private FormAuthenticationDetailsSource formAuthenticationDetailsSource;
+
+    @Autowired
+    private AuthenticationSuccessHandler customAuthenticationSuccessHandler;
+
+    @Autowired
+    private AuthenticationFailureHandler customAuthenticationFailureHandler;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception{
@@ -47,18 +55,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         CharacterEncodingFilter filter = new CharacterEncodingFilter();
         http
                 .authorizeRequests()
-                .antMatchers("/","/users", "user/login/**").permitAll()
+                .antMatchers("/","/users", "user/login/**", "/login*").permitAll()
                 .antMatchers("/mypage").hasRole("USER")
                 .antMatchers("/messages").hasRole("MANAGER")
                 .antMatchers("/config").hasRole("ADMIN")
                 .anyRequest().authenticated()
-
         .and()
                 .formLogin()
                 .loginPage("/login")
                 .loginProcessingUrl("/login_proc")
-                .authenticationDetailsSource(authenticationDetailsSource)
                 .defaultSuccessUrl("/")
+                .authenticationDetailsSource(formAuthenticationDetailsSource)
+                .successHandler(customAuthenticationSuccessHandler)
+                .failureHandler(customAuthenticationFailureHandler)
                 .permitAll();
     }
 
