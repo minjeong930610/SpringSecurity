@@ -10,26 +10,29 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
-import java.util.List;
+
 @Service("userDetailsService")
-public class CustomUserDetailsService implements UserDetailsService {
+public class CustomUserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private HttpServletRequest request;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
 
         Account account = userRepository.findByUsername(username);
-
-        if(account == null){
-            throw new UsernameNotFoundException("UsernameNotFoundException");
+        if (account == null) {
+            if (userRepository.countByUsername(username) == 0) {
+                throw new UsernameNotFoundException("No user found with username: " + username);
+            }
         }
-
-        List<GrantedAuthority> roles = new ArrayList<>();
+        ArrayList<GrantedAuthority> roles = new ArrayList<GrantedAuthority>();
         roles.add(new SimpleGrantedAuthority(account.getRole()));
-        //account 객체를 얻어와서 직접 return 하도록 구현
-        AccountContext accountContext = new AccountContext(account, roles); //권한 정보 전달
 
-        return accountContext;
+        return new AccountContext(account, roles);
     }
 }

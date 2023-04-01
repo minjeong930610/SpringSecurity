@@ -15,9 +15,8 @@
     <connection id="5e3a886c-6c88-47ab-aadb-fe1519fd073c">
       <console name="Connection" type="STANDARD" schema="public" session="Main"><![CDATA[select * from account;
 update account
-set username = 'user'
-, email = 'user@test'
-where id = '1'
+set role = 'MANAGER'
+where id = '2'
 
 commit;]]></console>
     </connection>
