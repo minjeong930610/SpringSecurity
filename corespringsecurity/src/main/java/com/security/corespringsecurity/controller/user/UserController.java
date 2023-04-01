@@ -35,7 +35,7 @@ public class UserController {
 
 		ModelMapper modelMapper = new ModelMapper();
 		Account account = modelMapper.map(accountDto, Account.class);
-		account.setPassword(passwordEncoder.encode(account.getPassword()));
+		account.setPassword(passwordEncoder.encode(accountDto.getPassword()));
 		userService.createUser(account);
 
 
