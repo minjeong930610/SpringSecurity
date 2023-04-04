@@ -1,7 +1,7 @@
 package com.security.corespringsecurity.security.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.security.corespringsecurity.domain.Account;
+import com.security.corespringsecurity.domain.entity.Account;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -14,16 +14,19 @@ import java.io.IOException;
 
 public class AjaxAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper mapper = new ObjectMapper();
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        //인증에 성공한 정보
-        Account account = (Account) authentication.getPrincipal(); //account 객체 (AjaxAuthenticationToken(accountContext.getAccount)
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+                                        Authentication authentication) throws IOException, ServletException {
+        Account account = (Account) authentication.getPrincipal();
 
         response.setStatus(HttpStatus.OK.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-        objectMapper.writeValue(response.getWriter(), account); //objectMapper가 json형태로 변환하여 다시 client로 전달
+//        HttpSession session = request.getSession();
+//        session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
+
+        mapper.writeValue(response.getWriter(), account);
     }
 }
