@@ -1,5 +1,8 @@
 package com.security.corespringsecurity.security.common;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 
@@ -9,10 +12,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class AjaxLoginAuthenticationEntryPoint implements AuthenticationEntryPoint {
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-     //authException 인증 예외가 파라미터로 전달되고 있음.
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "UnAuthorized 401 error"); //익명사용자가 접근
 
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        response.getWriter().write(objectMapper.writeValueAsString(HttpServletResponse.SC_UNAUTHORIZED));
     }
 }
