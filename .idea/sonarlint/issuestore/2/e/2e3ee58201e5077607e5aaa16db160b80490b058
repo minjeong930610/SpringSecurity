@@ -1,0 +1,9 @@
+
+g	java:S112"FDefine and throw a dedicated exception instead of using a generic one.(έ§¶»ψÿÿÿÿ8ϊ–φετ0
+b	java:S112*"FDefine and throw a dedicated exception instead of using a generic one.(‰ΐ¤8ϊ–φετ0
+g
+java:S22595"EA "NullPointerException" could be thrown; "account" is nullable here.(ΑΛβµψÿÿÿÿ8‰—φετ0
+
+java:S1130"lRemove the declaration of thrown exception 'java.lang.Exception', as it cannot be thrown from method's body.(έ§¶»ψÿÿÿÿ8“—φετ0
+‰
+java:S1130*"lRemove the declaration of thrown exception 'java.lang.Exception', as it cannot be thrown from method's body.(‰ΐ¤8–—φετ0
